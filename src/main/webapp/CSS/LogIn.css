@@ -1,0 +1,114 @@
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding:20px;
+  background-color: #FFF8F0;
+  align-items:center;
+  justify-content:center;
+}
+.navbar{
+    font-family: Arial, sans-serif;
+    background-color: snow;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+}
+.logo img{
+    height:(181, 90, 31);
+    width: 100px;
+}
+.brand {
+  color: #b55a1f;
+  font-size: 32px;
+  margin: 0;
+  
+}
+.container {
+  	display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 100vh; /* Ensure full viewport height */
+    background-color: #FFF8F0;
+}
+
+.login-card {
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 8px; /* Optional: round the corners */
+    padding: 30px;
+    background-color: #fff; /* Optional background color for the card */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    width: 400px; /* Adjust width as needed */
+    text-align: center; /* Center text within the card */
+  }
+
+.login-card h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #333;
+}
+
+.login-card p {
+  color: #333;
+  font-size: 14px;
+}
+
+.row{
+	display: flex;
+	justify-content: center;
+	width:100%;
+	margin-bottom: 10px;
+}
+.col{
+	width:100%;
+}
+label{
+	display:block;
+	margin-bottom:5px;
+	text-align: left;
+}
+input,select{
+	width:100%;
+	padding:10px;
+	border:1px solid #ccc;
+	border-radius:5px;
+	box-sizing:border-box;
+}
+button{
+	background-color: #ff8040;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #449A44;
+}
+.forgot-button, .register-button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 5px;
+}
+
+.forgot-button {
+    color: #4CAF50;
+    background-color: transparent;
+    border: 1px solid #4CAF50;
+}
+
+.register-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.register-button:hover {
+    background-color: #449A44;
+}
