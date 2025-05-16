@@ -64,6 +64,7 @@ public class LoginController extends HttpServlet {
             if (userModel != null) {
                 // Set session attributes
                 SessionUtil.setAttribute(req, "admin", userModel);
+                SessionUtil.setAttribute(req, "userId", userModel.getUserId());
                 SessionUtil.setAttribute(req, "userName", userModel.getUsername());
                 SessionUtil.setAttribute(req, "role", userModel.getRole());
 

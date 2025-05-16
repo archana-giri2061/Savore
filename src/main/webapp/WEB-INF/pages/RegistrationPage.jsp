@@ -22,7 +22,7 @@
                 <div class="error-message">${error}</div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/RegistrationPage" method="post">
+            <form action="${pageContext.request.contextPath}/RegistrationPage" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
                 <label for="fullname">Full Name</label>
@@ -36,6 +36,9 @@
 
                 <label for="address">Address</label>
                 <input type="text" id="address" name="address" placeholder="Enter address">
+                
+                <label for="profileImage">Profile Image</label>
+                <input type="file" id="profileImage" name="profileImage" accept="image/*" required>
 
                 <label for="role">Role</label>
                 <select id="role" name="role" required>

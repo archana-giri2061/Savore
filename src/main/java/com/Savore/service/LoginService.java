@@ -24,42 +24,35 @@ public class LoginService {
      * @throws SQLException           if a database error occurs
      * @throws ClassNotFoundException if the database driver is not found
      */
-    public UserModel authenticateUser(String username, String password) throws SQLException, ClassNotFoundException {
-        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-            System.err.println("Invalid username or password: username=" + username);
-            return null;
-        }
+	public UserModel authenticateUser(String username, String password) throws SQLException, ClassNotFoundException {
+	    if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+	        return null;
+	    }
 
-        String query = "SELECT username, password, role FROM users WHERE username = ?";
-        try (Connection conn = DbConfig.getDbConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, username);
-            System.out.println("Executing query: " + query + " with username: " + username);
+	    String query = "SELECT user_id, username, password, role FROM users WHERE username = ?";
+	    try (Connection conn = DbConfig.getDbConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+	        stmt.setString(1, username);
+	        try (ResultSet result = stmt.executeQuery()) {
+	            if (result.next()) {
+	                int userId = result.getInt("user_id");
+	                String dbUserName = result.getString("username");
+	                String dbPassword = result.getString("password");
+	                String dbRole = result.getString("role");
 
-            try (ResultSet result = stmt.executeQuery()) {
-                if (result.next()) {
-                    String dbUserName = result.getString("username");
-                    String dbPassword = result.getString("password");
-                    String dbRole = result.getString("role");
+	                if (PasswordUtil.checkPassword(password, dbPassword)) {
+	                    UserModel user = new UserModel();
+	                    user.setUserId(userId);  // ✅ Set userId
+	                    user.setUsername(dbUserName);
+	                    user.setRole(dbRole);
+	                    return user;
+	                } else {
+	                    return null;
+	                }
+	            } else {
+	                return null;
+	            }
+	        }
+	    }
+	}
 
-                    System.out.println("Retrieved username: " + dbUserName + ", role: " + dbRole);
-                    System.out.println("Stored hash: " + dbPassword);
-
-                    // Verify password using hash
-                    if (PasswordUtil.checkPassword(password, dbPassword)) {
-                        UserModel user = new UserModel();
-                        user.setUsername(dbUserName);
-                        user.setRole(dbRole);
-                        System.out.println("Authentication successful for user: " + dbUserName);
-                        return user;
-                    } else {
-                        System.err.println("Password mismatch for user: " + username);
-                        return null;
-                    }
-                } else {
-                    System.err.println("User not found: " + username);
-                    return null;
-                }
-            }
-        }
-    }
 }

@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
  * Model class representing a user.
  */
 public class UserModel {
-    private Integer userId;
+        private String image_URL;
+private Integer userId;
     private String username;
     private String email;
     private String password;
@@ -108,5 +109,13 @@ public class UserModel {
 
     public void setIsSubscribed(Boolean isSubscribed) {
         this.isSubscribed = isSubscribed;
+    }
+
+    public String getImage_URL() {
+        return image_URL;
+    }
+
+    public void setImage_URL(String image_URL) {
+        this.image_URL = image_URL;
     }
 }

@@ -21,6 +21,7 @@ public class CuisinePageController extends HttpServlet {
         HttpSession session = request.getSession(false);
         String userName = null;
 
+        // 🟩 Handle session or cookie-based login
         if (session != null && session.getAttribute("userName") != null) {
             userName = (String) session.getAttribute("userName");
         } else {
@@ -37,17 +38,25 @@ public class CuisinePageController extends HttpServlet {
             return;
         }
 
-        // Fetch food list from the database
+        // 🟩 Load food items: all or filtered by country
         FoodItemsDAO dao = null;
-		try {
-			dao = new FoodItemsDAO();
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        List<FoodItems> foodList = dao.getAllFoodItems();
-        request.setAttribute("foodList", foodList);
+        List<FoodItems> foodList = null;
 
+        try {
+            dao = new FoodItemsDAO();
+            String country = request.getParameter("country");
+
+            if (country != null && !country.trim().isEmpty()) {
+                foodList = dao.getFoodByCountry(country.trim());
+            } else {
+                foodList = dao.getAllFoodItems();
+            }
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        request.setAttribute("foodList", foodList);
         request.setAttribute("username", userName);
         request.getRequestDispatcher("/WEB-INF/pages/CuisinePage.jsp").forward(request, response);
     }

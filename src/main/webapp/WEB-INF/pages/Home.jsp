@@ -10,7 +10,9 @@
 
 <body>
     <div class="container">
-        <jsp:include page="Header.jsp" />
+    
+    	<jsp:include page="Header.jsp" />
+    	
 
         <section class="hero">
             <h1>Savor the World at Your Table</h1>

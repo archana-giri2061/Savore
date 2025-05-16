@@ -102,7 +102,7 @@ public class FoodItemsDAO {
         return item;
     }
     public void updateFood(FoodItems food) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE food SET food_name=?, description=?, price=?, country=?, image_url=?, availability=? WHERE food_id=?";
+        String sql = "UPDATE food_items SET food_name=?, description=?, price=?, country=?, image_url=?, availability=? WHERE food_id=?";
         try (Connection conn = DbConfig.getDbConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, food.getFoodName());
@@ -114,6 +114,35 @@ public class FoodItemsDAO {
             stmt.setInt(7, food.getFoodId());
             stmt.executeUpdate();
         }
+    }
+
+    public List<FoodItems> getFoodByCountry(String country) {
+        List<FoodItems> foodList = new ArrayList<>();
+        String sql = "SELECT * FROM food_items WHERE country LIKE ? AND availability = 'AVAILABLE'";
+
+        try (Connection conn = DbConfig.getDbConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, "%" + country + "%"); // partial match allowed
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    FoodItems food = new FoodItems();
+                    food.setFoodId(rs.getInt("food_id"));
+                    food.setFoodName(rs.getString("food_name"));
+                    food.setDescription(rs.getString("description"));
+                    food.setPrice(rs.getDouble("price"));
+                    food.setCountry(rs.getString("country"));
+                    food.setImageUrl(rs.getString("image_url"));
+                    food.setAvailability(rs.getString("availability"));
+                    foodList.add(food);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return foodList;
     }
 
 }

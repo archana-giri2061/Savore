@@ -70,7 +70,7 @@ public class RegisterService {
     public boolean registerUser(UserModel user) {
         LOGGER.info("Attempting to register user: " + user.getUsername());
 
-        String sql = "INSERT INTO users (username, email, password, address, role, created_at, is_subscribed) " +
+        String sql = "INSERT INTO users (username, email, password, address, role, created_at, Image_URL) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DbConfig.getDbConnection();
@@ -85,7 +85,7 @@ public class RegisterService {
             stmt.setString(4, user.getAddress());
             stmt.setString(5, user.getRole());
             stmt.setTimestamp(6, java.sql.Timestamp.valueOf(user.getCreatedAt()));
-            stmt.setBoolean(7, user.getIsSubscribed());
+            stmt.setString(7, user.getImage_URL());
 
             int rowsAffected = stmt.executeUpdate();
 

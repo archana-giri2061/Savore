@@ -1,17 +1,17 @@
 package com.Savore.Controller;
 
-import java.io.IOException;
+import com.Savore.service.DashboardService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.Savore.service.DashboardService;
 
-/**
- * Controller for admin dashboard view.
- */
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Map;
+
 @WebServlet(urlPatterns = {"/AdminDashboard"})
 public class AdminDashboardController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -33,11 +33,20 @@ public class AdminDashboardController extends HttpServlet {
             return;
         }
 
-        // You can set data here if needed
-        req.setAttribute("dashboardSummary", dashboardService.getAdminSummary());
+        try {
+            Map<String, Object> metrics = dashboardService.getDashboardMetrics();
+
+            req.setAttribute("totalUsers", metrics.get("totalUsers"));
+            req.setAttribute("newSignups", metrics.get("newSignups"));
+            req.setAttribute("totalOrders", metrics.get("totalOrders"));
+            req.setAttribute("totalRevenue", metrics.get("totalRevenue"));
+
+        } catch (SQLException | ClassNotFoundException e) {
+            req.setAttribute("error", "Failed to load dashboard data.");
+            e.printStackTrace();
+        }
 
         req.getRequestDispatcher("/WEB-INF/pages/AdminDashboard.jsp").forward(req, resp);
-        
     }
-    
+
 }
