@@ -6,64 +6,82 @@
     <meta charset="UTF-8">
     <title>User Profile</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/UserProfile.css">
+    
 </head>
 <body>
-<div class="container">
-    <header>
-        <div class="logo">
-            <img src="${pageContext.request.contextPath}/Resources/Images/System/FinalLogo.png" alt="logo">
-        </div>
-        <nav>
-            <span class="mr-4 text-gray-600">Welcome, ${sessionScope.loggedInUser.username}</span>
-        </nav>
-    </header>
 
-    <h1>User Profile</h1>
+<jsp:include page="Header.jsp" />
+
+<div class="profile-container">
+    <div class="profile-header">
+        <img src="${pageContext.request.contextPath}/Resources/Images/System/UserProfile/${user.image_URL}" 
+             alt="Profile Image" 
+             onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/Resources/Images/System/UserProfile/default.jpg';">
+        <h2>${user.username}</h2>
+        <p>${user.address}</p>
+    </div>
+
     <c:if test="${not empty successMessage}">
-        <p class="message" style="color: green;">${successMessage}</p>
+        <div class="success-message">${successMessage}</div>
     </c:if>
     <c:if test="${not empty errorMessage}">
-        <p class="message" style="color: red;">${errorMessage}</p>
+        <div class="error-message">${errorMessage}</div>
     </c:if>
 
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 40px;">
-        <div style="flex: 1;">
-            <!-- Update Profile Form -->
-            <form action="${pageContext.request.contextPath}/profile" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="action" value="update">
-                <label for="firstName">Username:</label>
-                <input type="text" id="firstName" name="firstName" value="${user.user_Name}" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="${user.user_Email}" required>
-
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" value="${user.user_Address}">
-
-                <label for="profileImage">Update Profile Image:</label>
-                <input type="file" id="profileImage" name="profileImage" accept="image/*">
-
-                <button type="submit">Update Profile</button>
-            </form>
-
-            <!-- Change Password Form -->
-            <form action="${pageContext.request.contextPath}/profile" method="post" style="margin-top: 20px;">
-                <input type="hidden" name="action" value="changePassword">
-                <label for="password">New Password:</label>
-                <input type="password" id="password" name="password" required>
-                <button type="submit">Change Password</button>
-            </form>
+    <form method="post" action="${pageContext.request.contextPath}/UserProfile" enctype="multipart/form-data">
+        <div class="image-upload-container">
+            <label for="profileImage">Change Profile Picture:</label><br>
+            <input type="file" id="profileImage" name="profileImage" accept="image/*">
         </div>
 
-        <div style="text-align: center;">
-            <img 
-                src="${pageContext.request.contextPath}/Resources/Images/user/${user.image_path}" 
-                alt="Profile Image"
-                onerror="this.onerror=null; this.src='${pageContext.request.contextPath}/Resources/Images/user/default_avatar.png';"
-                style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid #ccc;">
-            <p style="margin-top: 10px; font-weight: bold;">${user.user_Name}</p>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" name="firstName" value="${user.username}" required>
+            </div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" value="${user.username}" readonly>
+            </div>
         </div>
-    </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" value="${user.email}" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" value="(+98) 9123728167" readonly>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="address" value="${user.address}">
+            </div>
+            <div class="form-group">
+                <label>Postal Code</label>
+                <input type="text" value="23728167" readonly>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>New Password</label>
+                <input type="password" name="password" placeholder="Enter new password">
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button type="submit" name="action" value="update">Save Changes</button>
+            <button type="submit" name="action" value="changePassword">Change Password</button>
+        </div>
+    </form>
 </div>
+
+<jsp:include page="Footer.jsp" />
+
 </body>
 </html>

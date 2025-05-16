@@ -1,62 +1,68 @@
 @charset "UTF-8";
 
- header {
-    background-color: #fff;
-    padding: 20px 0;
+header {
+  background-color: #fff;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.logo img {
+  height: 50px;
+}
+
+nav {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+}
+
+nav ul {
+  list-style: none;
     display: flex;
-    justify-content: space-between; /* Pushes elements to the edges */
-    align-items: center;
-  }
-
-  .logo {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #333;
-    margin-right: auto;
-    padding-left: 20px; /* Push logo to the left */
-  }
-
-  nav {
-    display: flex; /* Use flexbox for navigation items */
-    justify-content: flex-start; /* Align items to the start (left) */
-    margin-right: auto; /* push nav to left */
-  }
-
-  nav ul {
-    list-style: none;
-    padding: 0;
+    gap: 25px;
+    justify-content: center;
     margin: 0;
-    display: flex; /* Make nav items horizontal */
-  }
+    padding: 0;
+}
 
-  nav ul li {
-    margin: 0 15px;
-    color: #5C1A1B;
-  }
+nav ul li {
+  margin: 0 15px;
+  color: #5C1A1B;
+}
 
-  nav a {
-    text-decoration: none;
-    color: #5C1A1B;
-  }
+nav a {
+  text-decoration: none;
+  color: #5C1A1B;
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  transition: color 0.3s;
+}
 
-  .search-bar {
-    display: flex;
-    align-items: center;
-  }
+nav a:hover {
+  color: #B22222;
+}
 
-  .search-bar input[type="text"] {
-    padding: 8px;
-    border: 1px solid #5C1A1B;
-    border-radius: 5px 0 0 5px;
-    margin-right: 5px;
-  }
+.profile-icon {
+  position: absolute;
+  right: 40px;
+  top: 21px;
+}
 
-  .search-bar button {
-    background-color: #ddd;
-    color: #333;
-    border: none;
-    padding: 8px 10px;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-  }
-  
+.profile-icon a {
+  color: #5C1A1B;
+  font-size: 22px;
+  text-decoration: none;
+}
+
+.profile-icon a:hover {
+  color: #B22222;
+}

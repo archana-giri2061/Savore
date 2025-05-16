@@ -12,76 +12,74 @@ import jakarta.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
 
-@WebServlet("/AdminProfile")
+@WebServlet("/UserProfile")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5)
-public class AdminProfileController extends HttpServlet {
+public class UserProfileController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final UserDAO userDAO = new UserDAO();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("admin") == null) {
+        if (session == null || session.getAttribute("loggedInUser") == null) {
             request.getRequestDispatcher("/WEB-INF/pages/LogIn.jsp").forward(request, response);
             return;
         }
 
-        UserModel sessionAdmin = (UserModel) session.getAttribute("admin");
+        UserModel sessionUser = (UserModel) session.getAttribute("loggedInUser");
 
-        // Fetch updated admin details from DB
-        UserModel updatedAdmin = userDAO.getUserById(sessionAdmin.getUserId());
+        // ✅ Fetch the latest user details including image from DB
+        UserModel updatedUser = userDAO.getUserById(sessionUser.getUserId());
 
-        session.setAttribute("admin", updatedAdmin);
-        request.setAttribute("admin", updatedAdmin);
+        // ✅ Update session attribute so changes reflect throughout the session
+        session.setAttribute("loggedInUser", updatedUser);
+        request.setAttribute("user", updatedUser);
 
-        // ✅ Preserve registered users section
-        List<UserModel> users = userDAO.getAllUsers();
-        request.setAttribute("users", users);
-
-        request.getRequestDispatcher("/WEB-INF/pages/AdminProfile.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pages/UserProfile.jsp").forward(request, response);
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("admin") == null) {
+        if (session == null || session.getAttribute("loggedInUser") == null) {
             request.getRequestDispatcher("/WEB-INF/pages/LogIn.jsp").forward(request, response);
             return;
         }
 
-        UserModel sessionAdmin = (UserModel) session.getAttribute("admin");
+        UserModel sessionUser = (UserModel) session.getAttribute("loggedInUser");
         String action = request.getParameter("action");
 
         if ("update".equals(action)) {
-            String username = request.getParameter("username");
+            String username = request.getParameter("firstName");
             String email = request.getParameter("email");
             String address = request.getParameter("address");
             Part imagePart = request.getPart("profileImage");
 
             if (imagePart != null && imagePart.getSize() > 0) {
                 String imageFileName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
-                String imagePath = "Resources/Images/System/UserProfile/" + imageFileName;
+                String imagePath = "Resources/Images/user/" + imageFileName;
 
                 String realPath = request.getServletContext().getRealPath("/") + imagePath;
                 File imageFile = new File(realPath);
                 imageFile.getParentFile().mkdirs();
                 imagePart.write(realPath);
 
-                sessionAdmin.setImage_URL(imageFileName); // Save only image name
+                sessionUser.setImage_URL(imageFileName); // only image name saved in DB
             }
 
-            sessionAdmin.setUsername(username);
-            sessionAdmin.setEmail(email);
-            sessionAdmin.setAddress(address);
+            sessionUser.setUsername(username);
+            sessionUser.setEmail(email);
+            sessionUser.setAddress(address);
 
-            userDAO.updateUser(sessionAdmin);
-            session.setAttribute("admin", sessionAdmin);
+            userDAO.updateUser(sessionUser);
+            session.setAttribute("loggedInUser", sessionUser);
             request.setAttribute("successMessage", "Profile updated successfully.");
 
         } else if ("changePassword".equals(action)) {
@@ -89,8 +87,8 @@ public class AdminProfileController extends HttpServlet {
             if (newPassword != null && newPassword.length() >= 8) {
                 try {
                     String hashed = PasswordUtil.hashPassword(newPassword);
-                    sessionAdmin.setPassword(hashed);
-                    userDAO.updatePassword(sessionAdmin.getEmail(), hashed);
+                    sessionUser.setPassword(hashed);
+                    userDAO.updatePassword(sessionUser.getEmail(), hashed);
                     request.setAttribute("successMessage", "Password changed successfully.");
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -101,8 +99,7 @@ public class AdminProfileController extends HttpServlet {
             }
         }
 
-        request.setAttribute("admin", sessionAdmin);
-        request.setAttribute("users", userDAO.getAllUsers()); // ✅ Preserve all users
-        request.getRequestDispatcher("/WEB-INF/pages/AdminProfile.jsp").forward(request, response);
+        request.setAttribute("user", sessionUser);
+        request.getRequestDispatcher("/WEB-INF/pages/UserProfile.jsp").forward(request, response);
     }
 }

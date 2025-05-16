@@ -123,6 +123,17 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
+    public void updatePassword(String email, String password) {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, password);
+            ps.setString(2, email);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     private UserModel extractUser(ResultSet rs) throws SQLException {
         UserModel user = new UserModel();

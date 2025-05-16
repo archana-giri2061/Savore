@@ -8,14 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
 /**
  * Service class for handling user registration operations, including checking for
  * existing usernames/emails and registering new users in the database.
  */
 public class RegisterService {
-    private static final Logger LOGGER = Logger.getLogger(RegisterService.class.getName());
 
     /**
      * Checks if a username already exists in the database.
@@ -34,7 +32,7 @@ public class RegisterService {
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
-            LOGGER.severe("Error checking username existence: " + e.getMessage());
+            System.out.println("Error checking username existence: " + e.getMessage());
         }
         return false;
     }
@@ -56,7 +54,7 @@ public class RegisterService {
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
-            LOGGER.severe("Error checking email existence: " + e.getMessage());
+            System.out.println("Error checking email existence: " + e.getMessage());
         }
         return false;
     }
@@ -68,16 +66,17 @@ public class RegisterService {
      * @return true if registration is successful, false otherwise
      */
     public boolean registerUser(UserModel user) {
-        LOGGER.info("Attempting to register user: " + user.getUsername());
+        System.out.println("Attempting to register user: " + user.getUsername());
 
         String sql = "INSERT INTO users (username, email, password, address, role, created_at, Image_URL) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DbConfig.getDbConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            LOGGER.fine("Executing SQL: " + sql);
-            LOGGER.fine("With values: username=" + user.getUsername() + ", email=" + user.getEmail() +
-                        ", address=" + user.getAddress() + ", role=" + user.getRole());
+
+            System.out.println("Executing SQL: " + sql);
+            System.out.println("With values: username=" + user.getUsername() + ", email=" + user.getEmail() +
+                    ", address=" + user.getAddress() + ", role=" + user.getRole());
 
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
@@ -90,19 +89,19 @@ public class RegisterService {
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                LOGGER.info("Registration successful for user: " + user.getUsername() + ". Rows affected: " + rowsAffected);
+                System.out.println("Registration successful for user: " + user.getUsername() + ". Rows affected: " + rowsAffected);
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         user.setUserId(generatedKeys.getInt(1));
-                        LOGGER.fine("Generated user ID: " + user.getUserId());
+                        System.out.println("Generated user ID: " + user.getUserId());
                     }
                 }
                 return true;
             }
-            LOGGER.warning("No rows affected by INSERT for user: " + user.getUsername());
+            System.out.println("No rows affected by INSERT for user: " + user.getUsername());
             return false;
         } catch (SQLException | ClassNotFoundException e) {
-            LOGGER.severe("Error registering user: " + user.getUsername() + ". Error: " + e.getMessage());
+            System.out.println("Error registering user: " + user.getUsername() + ". Error: " + e.getMessage());
             return false;
         }
     }
@@ -114,12 +113,12 @@ public class RegisterService {
         try (Connection conn = DbConfig.getDbConnection();
              Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery("DESCRIBE users");
-            LOGGER.info("Users table structure:");
+            System.out.println("Users table structure:");
             while (rs.next()) {
-                LOGGER.info(rs.getString(1) + " - " + rs.getString(2) + " - " + rs.getString(3));
+                System.out.println(rs.getString(1) + " - " + rs.getString(2) + " - " + rs.getString(3));
             }
         } catch (SQLException | ClassNotFoundException e) {
-            LOGGER.severe("Error checking table structure: " + e.getMessage());
+            System.out.println("Error checking table structure: " + e.getMessage());
         }
     }
 }

@@ -2,92 +2,88 @@ package com.Savore.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.servlet.http.Part;
 
 public class ImageUtil {
-	/**
-	 * Extracts the file name from the given {@link Part} object based on the
-	 * "content-disposition" header.
-	 * 
-	 * <p>
-	 * This method parses the "content-disposition" header to retrieve the file name
-	 * of the uploaded image. If the file name cannot be determined, a default name
-	 * "download.png" is returned.
-	 * </p>
-	 * 
-	 * @param part the {@link Part} object representing the uploaded file.
-	 * @return the extracted file name. If no filename is found, returns a default
-	 *         name "download.png".
-	 */
-	public String getImageNameFromPart(Part part) {
-		// Retrieve the content-disposition header from the part
-		String contentDisp = part.getHeader("content-disposition");
 
-		// Split the header by semicolons to isolate key-value pairs
-		String[] items = contentDisp.split(";");
+    /**
+     * Extracts original file name from the uploaded part.
+     */
+    public String getImageNameFromPart(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        String imageName = null;
 
-		// Initialize imageName variable to store the extracted file name
-		String imageName = null;
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+                imageName = s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+        }
 
-		// Iterate through the items to find the filename
-		for (String s : items) {
-			if (s.trim().startsWith("filename")) {
-				// Extract the file name from the header value
-				imageName = s.substring(s.indexOf("=") + 2, s.length() - 1);
-			}
-		}
+        return (imageName == null || imageName.isEmpty()) ? "default.jpg" : imageName;
+    }
 
-		// Check if the filename was not found or is empty
-		if (imageName == null || imageName.isEmpty()) {
-			// Assign a default file name if none was provided
-			imageName = "download.png";
-		}
+    /**
+     * Uploads the image to the specified folder in your system.
+     * This version uses a hardcoded base path and appends the given folder name.
+     */
+    public boolean uploadImage(Part part, String rootPath, String saveFolder) {
+        String savePath = getSavePath(saveFolder);
+        File fileSaveDir = new File(savePath);
 
-		// Return the extracted or default file name
-		return imageName;
-	}
+        if (!fileSaveDir.exists() && !fileSaveDir.mkdirs()) {
+            System.out.println("Failed to create directory: " + savePath);
+            return false;
+        }
 
-	/**
-	 * Uploads the image file from the given {@link Part} object to a specified
-	 * directory on the server.
-	 * 
-	 * <p>
-	 * This method ensures that the directory where the file will be saved exists
-	 * and creates it if necessary. It writes the uploaded file to the server's file
-	 * system. Returns {@code true} if the upload is successful, and {@code false}
-	 * otherwise.
-	 * </p>
-	 * 
-	 * @param part the {@link Part} object representing the uploaded image file.
-	 * @return {@code true} if the file was successfully uploaded, {@code false}
-	 *         otherwise.
-	 */
-	public boolean uploadImage(Part part, String rootPath, String saveFolder) {
-		String savePath = getSavePath(saveFolder);
-		File fileSaveDir = new File(savePath);
+        try {
+            String originalName = getImageNameFromPart(part);
+            String extension = originalName.substring(originalName.lastIndexOf('.'));
+            String uniqueFileName = "IMG_" + DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now()) + extension;
 
-		// Ensure the directory exists
-		if (!fileSaveDir.exists()) {
-			if (!fileSaveDir.mkdir()) {
-				return false; // Failed to create the directory
-			}
-		}
-		try {
-			// Get the image name
-			String imageName = getImageNameFromPart(part);
-			// Create the file path
-			String filePath = savePath + "/" + imageName;
-			// Write the file to the server
-			part.write(filePath);
-			return true; // Upload successful
-		} catch (IOException e) {
-			e.printStackTrace(); // Log the exception
-			return false; // Upload failed
-		}
-	}
+            String filePath = savePath + File.separator + uniqueFileName;
+            part.write(filePath);
 
-	public String getSavePath(String saveFolder) {
-		return "C:/Users/Prithivi/eclipse-workspace/CollegeApp/src/main/webapp/resources/images/" + saveFolder + "/";
-	}
+            System.out.println("✅ Image saved to: " + filePath);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Constructs the full absolute system path to save images into.
+     * This must match your project folder structure.
+     */
+    public String getSavePath(String saveFolder) {
+        return "C:\\Users\\ARCHANA\\eclipse-workspace\\Savore\\src\\main\\webapp\\Resources\\Images\\System/UserProfile" 
+                + File.separator + saveFolder;
+    }
+
+    /**
+     * Static method that returns the unique filename after saving.
+     * Useful when you want to save the actual filename into DB.
+     */
+    public static String saveImage(Part part, String uploadDir) {
+        try {
+            File dir = new File(uploadDir);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            String originalFileName = part.getSubmittedFileName();
+            String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
+            String uniqueName = "IMG_" + DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now()) + extension;
+
+            part.write(uploadDir + File.separator + uniqueName);
+            return uniqueName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
