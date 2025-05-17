@@ -12,15 +12,19 @@
 	<section class="contact-section">
             <div class="contact-form">
                 <h2>Contact Us</h2>
-                <form>
-                    <label for="name">Name</label>
-                    <input type="text" id="name" placeholder="Enter your name">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Enter your email">
-                    <label for="question">Question</label>
-                    <textarea id="question" placeholder="Enter your question or feedback"></textarea>
-                    <button type="submit">Submit</button>
-                </form>
+                <form onsubmit="return showConfirmation();">
+    				<label for="name">Name</label>
+    				<input type="text" id="name" placeholder="Enter your name" required>
+
+    				<label for="email">Email</label>
+    				<input type="email" id="email" placeholder="Enter your email" required>
+
+    				<label for="question">Question</label>
+    				<textarea id="question" placeholder="Enter your question or feedback" required></textarea>
+
+    				<button type="submit">Submit</button>
+				</form>
+
             </div>
             <div class="map">
                 <iframe
@@ -34,6 +38,13 @@
                 </iframe>
             </div>
         </section>
+        <script>
+    function showConfirmation() {
+        alert("✅ Your message has been submitted successfully!");
+        return false; // prevent page refresh (if you're not actually submitting data)
+    }
+</script>
+        
         <jsp:include page="Footer.jsp" />
 </body>
 </html>

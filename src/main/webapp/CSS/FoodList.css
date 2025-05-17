@@ -1,95 +1,147 @@
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f7fafc;
+    background-color: #f9fbfd;
     margin: 0;
     padding: 0;
 }
 
 .container {
     max-width: 1200px;
-    margin: auto;
+    margin: 0 auto;
     padding: 2rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 1.5rem;
+}
+
+.input-text,
+.select-box {
+    border-radius: 0.375rem;
+    border: 1px solid #cbd5e0;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.input-text:focus,
+.select-box:focus {
+    border-color: #3182ce;
+    outline: none;
 }
 
 .food-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.food-table thead th {
-    background-color: #f7fafc;
-    color: #4a5568;
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #e2e8f0;
-    font-weight: 500;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1rem;
-}
-
-.food-table tbody td {
-    padding: 12px;
-    border-bottom: 1px solid #e2e8f0;
-    color: #2d3748;
-}
-
-.food-table tbody tr:hover {
+.food-table thead {
     background-color: #edf2f7;
 }
 
-.input-text, .select-box {
-    border-radius: 0.375rem;
-    border-width: 1px;
-    border-color: #e2e8f0;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    width: 20rem;
+.food-table thead th {
+    color: #2d3748;
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.food-table tbody td {
+    padding: 14px;
+    color: #4a5568;
+    border-top: 1px solid #e2e8f0;
+}
+
+.food-table tbody tr:hover {
+    background-color: #f7fafc;
 }
 
 .add-food-button {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 16px;
-    background-color: #48bb78;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #38a169;
     color: white;
+    font-weight: 500;
     font-size: 0.9rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin-top: 20px;
+    border-radius: 6px;
     border: none;
+    margin-top: 1.5rem;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
 }
 
 .add-food-button:hover {
-    background-color: #38a169;
+    background-color: #2f855a;
+}
+
+.edit-button,
+.delete-button {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
 }
 
 .edit-button {
     background-color: #3182ce;
-    border: 1px solid #3182ce;
     color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
+    margin-right: 8px;
 }
 
 .edit-button:hover {
-    background-color: #2a69ac;
+    background-color: #2b6cb0;
 }
 
 .delete-button {
     background-color: #e53e3e;
-    border: 1px solid #e53e3e;
     color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
 .delete-button:hover {
     background-color: #c53030;
 }
-   
+
+td img {
+    max-width: 90px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .food-table thead {
+        display: none;
+    }
+    .food-table, .food-table tbody, .food-table tr, .food-table td {
+        display: block;
+        width: 100%;
+    }
+    .food-table td {
+        padding-left: 50%;
+        position: relative;
+    }
+    .food-table td::before {
+        position: absolute;
+        top: 12px;
+        left: 16px;
+        width: 45%;
+        white-space: nowrap;
+        font-weight: 600;
+        color: #718096;
+    }
+}

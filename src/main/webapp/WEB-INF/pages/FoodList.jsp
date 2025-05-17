@@ -15,14 +15,7 @@
         <h1 class="text-3xl font-semibold text-gray-800 mb-6">Admin Food List</h1>
 
         <div class="flex flex-col md:flex-row gap-4 mb-4">
-            <input type="text" placeholder="Search Cuisine" class="input-text" />
-            <select class="select-box">
-                <option>Country</option>
-                <option>Nepal</option>
-                <option>India</option>
-                <option>China</option>
-                <option>Italy</option>
-            </select>
+            <input type="text" id="searchInput" placeholder="Search Country" class="input-text" onkeyup="filterByCountry()" />
         </div>
 
         <table class="food-table">
@@ -75,5 +68,21 @@
 
         <a href="${pageContext.request.contextPath}/AddFoodForm" class="add-food-button">Add New Food</a>
     </div>
+    <script>
+    function filterByCountry() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const tableBody = document.getElementById("food-list-body");
+        const rows = tableBody.getElementsByTagName("tr");
+
+        for (let i = 0; i < rows.length; i++) {
+            const countryCell = rows[i].getElementsByTagName("td")[4]; // 5th column is 'Country'
+            if (countryCell) {
+                const countryText = countryCell.textContent || countryCell.innerText;
+                rows[i].style.display = countryText.toLowerCase().includes(input) ? "" : "none";
+            }
+        }
+    }
+</script>
+    
 </body>
 </html>

@@ -11,48 +11,59 @@ import com.Savore.util.PasswordUtil;
 
 /**
  * Service class for handling user login operations.
+ * Validates credentials and returns authenticated user details.
+ * 
+ * author: 23048573_ArchanaGiri
  */
 public class LoginService {
 
     /**
-     * Authenticates a user by verifying username and password against the database.
+     * Authenticates a user by verifying the provided username and password against stored records.
      *
-     * @param username the username provided by the user
-     * @param password the password provided by the user
-     * @return a UserModel containing user details if authentication is successful,
-     *         null if credentials are invalid
-     * @throws SQLException           if a database error occurs
-     * @throws ClassNotFoundException if the database driver is not found
+     * @param username the entered username
+     * @param password the entered password
+     * @return UserModel if credentials are correct, otherwise null
+     * @throws SQLException if any SQL error occurs
+     * @throws ClassNotFoundException if JDBC driver is not found
      */
-	public UserModel authenticateUser(String username, String password) throws SQLException, ClassNotFoundException {
-	    if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
-	        return null;
-	    }
+    public UserModel authenticateUser(String username, String password) throws SQLException, ClassNotFoundException {
+        // Validate input
+        if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
+            System.out.println("Empty username or password provided.");
+            return null;
+        }
 
-	    String query = "SELECT user_id, username, password, role FROM users WHERE username = ?";
-	    try (Connection conn = DbConfig.getDbConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-	        stmt.setString(1, username);
-	        try (ResultSet result = stmt.executeQuery()) {
-	            if (result.next()) {
-	                int userId = result.getInt("user_id");
-	                String dbUserName = result.getString("username");
-	                String dbPassword = result.getString("password");
-	                String dbRole = result.getString("role");
+        String query = "SELECT user_id, username, password, role FROM users WHERE username = ?";
 
-	                if (PasswordUtil.checkPassword(password, dbPassword)) {
-	                    UserModel user = new UserModel();
-	                    user.setUserId(userId);  // ✅ Set userId
-	                    user.setUsername(dbUserName);
-	                    user.setRole(dbRole);
-	                    return user;
-	                } else {
-	                    return null;
-	                }
-	            } else {
-	                return null;
-	            }
-	        }
-	    }
-	}
+        try (Connection conn = DbConfig.getDbConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
+            stmt.setString(1, username);
+
+            try (ResultSet result = stmt.executeQuery()) {
+                if (result.next()) {
+                    int userId = result.getInt("user_id");
+                    String dbUserName = result.getString("username");
+                    String dbPassword = result.getString("password");
+                    String dbRole = result.getString("role");
+
+                    // Validate password
+                    if (PasswordUtil.checkPassword(password, dbPassword)) {
+                        UserModel user = new UserModel();
+                        user.setUserId(userId);
+                        user.setUsername(dbUserName);
+                        user.setRole(dbRole);
+                        System.out.println("Login successful for user: " + dbUserName + " (Role: " + dbRole + ")");
+                        return user;
+                    } else {
+                        System.out.println("Invalid password for user: " + username);
+                        return null;
+                    }
+                } else {
+                    System.out.println("Username not found: " + username);
+                    return null;
+                }
+            }
+        }
+    }
 }

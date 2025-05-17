@@ -1,46 +1,66 @@
 @charset "UTF-8";
-ody {
+body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7fafc;
+            background-color: #fff8f5;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
         }
         .form-container {
             background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 400px;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            width: 420px;
         }
         .form-container h2 {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
             font-weight: 600;
             color: #2d3748;
+            text-align: center;
         }
         .form-container input,
         .form-container textarea,
         .form-container select {
             width: 100%;
             padding: 0.75rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
             border: 1px solid #cbd5e0;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 1rem;
+            background-color: #fff;
+        }
+        .form-container textarea {
+            resize: vertical;
+            min-height: 80px;
         }
         .form-container button {
             background-color: #38a169;
             color: white;
-            padding: 0.75rem;
+            padding: 0.8rem;
             width: 100%;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         .form-container button:hover {
             background-color: #2f855a;
+        }
+        .form-container label {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            display: block;
+            color: #4a5568;
+        }
+        .form-container img {
+            width: 100%;
+            max-width: 150px;
+            border-radius: 10px;
+            margin-top: 0.5rem;
         }

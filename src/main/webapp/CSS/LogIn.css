@@ -1,114 +1,148 @@
-
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding:20px;
-  background-color: #FFF8F0;
-  align-items:center;
-  justify-content:center;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff0ea;
 }
-.navbar{
-    font-family: Arial, sans-serif;
-    background-color: snow;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-decoration: none;
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
-.logo img{
-    height:(181, 90, 31);
-    width: 100px;
+
+.login-box {
+  display: flex;
+  width: 900px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
-.brand {
-  color: #b55a1f;
+
+.login-left {
+  flex: 1;
+  background: linear-gradient(to bottom, #ff758c, #ff7eb3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.login-right {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 320px;
+}
+
+.brand-name {
+  color: #ff5e57;
   font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.login-form h2 {
   margin: 0;
-  
-}
-.container {
-  	display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    min-height: 100vh; /* Ensure full viewport height */
-    background-color: #FFF8F0;
-}
-
-.login-card {
-    border: 1px solid #ccc; /* Add a border */
-    border-radius: 8px; /* Optional: round the corners */
-    padding: 30px;
-    background-color: #fff; /* Optional background color for the card */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
-    width: 400px; /* Adjust width as needed */
-    text-align: center; /* Center text within the card */
-  }
-
-.login-card h2 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
   color: #333;
 }
 
-.login-card p {
-  color: #333;
+.login-form p {
+  font-size: 14px;
+  text-align: center;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.login-form label {
+  display: block;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+  margin-top: 15px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
   font-size: 14px;
 }
 
-.row{
-	display: flex;
-	justify-content: center;
-	width:100%;
-	margin-bottom: 10px;
-}
-.col{
-	width:100%;
-}
-label{
-	display:block;
-	margin-bottom:5px;
-	text-align: left;
-}
-input,select{
-	width:100%;
-	padding:10px;
-	border:1px solid #ccc;
-	border-radius:5px;
-	box-sizing:border-box;
-}
-button{
-	background-color: #ff8040;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #449A44;
-}
-.forgot-button, .register-button {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-    border-radius: 5px;
-    text-decoration: none;
-    margin-top: 5px;
+.remember-row {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.forgot-button {
-    color: #4CAF50;
-    background-color: transparent;
-    border: 1px solid #4CAF50;
+.login-button {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #ff5e57;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-.register-button {
-    background-color: #4CAF50;
-    color: white;
+.login-button:hover {
+  background-color: #e14b4b;
 }
 
-.register-button:hover {
-    background-color: #449A44;
+.forgot-link,
+.register-link {
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.forgot-link {
+  color: #ff5e57;
+}
+
+.register-link {
+  color: #28a745;
+}
+
+.error-message {
+  color: #b30000;
+  background-color: #ffe0e0;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.success-message {
+  color: #155724;
+  background-color: #d4edda;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 14px;
 }

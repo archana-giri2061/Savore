@@ -3,15 +3,13 @@ package com.Savore.service;
 import com.Savore.config.DbConfig;
 import com.Savore.model.UserModel;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
- * Service class for handling user registration operations, including checking for
- * existing usernames/emails and registering new users in the database.
+ * Service class for handling user registration operations,
+ * including checking for existing usernames/emails and adding new users to the database.
+ * 
+ * author: 23048573_ArchanaGiri
  */
 public class RegisterService {
 
@@ -28,11 +26,13 @@ public class RegisterService {
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1) > 0;
+                    boolean exists = rs.getInt(1) > 0;
+                    System.out.println("Username '" + username + "' exists: " + exists);
+                    return exists;
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error checking username existence: " + e.getMessage());
+            System.err.println("Error checking username existence: " + e.getMessage());
         }
         return false;
     }
@@ -50,11 +50,13 @@ public class RegisterService {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1) > 0;
+                    boolean exists = rs.getInt(1) > 0;
+                    System.out.println("Email '" + email + "' exists: " + exists);
+                    return exists;
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error checking email existence: " + e.getMessage());
+            System.err.println("Error checking email existence: " + e.getMessage());
         }
         return false;
     }
@@ -74,22 +76,19 @@ public class RegisterService {
         try (Connection conn = DbConfig.getDbConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            System.out.println("Executing SQL: " + sql);
-            System.out.println("With values: username=" + user.getUsername() + ", email=" + user.getEmail() +
-                    ", address=" + user.getAddress() + ", role=" + user.getRole());
-
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getAddress());
             stmt.setString(5, user.getRole());
-            stmt.setTimestamp(6, java.sql.Timestamp.valueOf(user.getCreatedAt()));
+            stmt.setTimestamp(6, Timestamp.valueOf(user.getCreatedAt()));
             stmt.setString(7, user.getImage_URL());
 
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("Registration successful for user: " + user.getUsername() + ". Rows affected: " + rowsAffected);
+                System.out.println("Registration successful for: " + user.getUsername());
+
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         user.setUserId(generatedKeys.getInt(1));
@@ -98,27 +97,32 @@ public class RegisterService {
                 }
                 return true;
             }
-            System.out.println("No rows affected by INSERT for user: " + user.getUsername());
+
+            System.out.println("Registration failed, no rows affected for: " + user.getUsername());
             return false;
+
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error registering user: " + user.getUsername() + ". Error: " + e.getMessage());
+            System.err.println("Error registering user '" + user.getUsername() + "': " + e.getMessage());
             return false;
         }
     }
 
     /**
-     * Debug method to check the users table structure (optional, for development use).
+     * Debug method to print the structure of the users table.
+     * Useful for troubleshooting and development.
      */
     public void debugTableStructure() {
         try (Connection conn = DbConfig.getDbConnection();
              Statement stmt = conn.createStatement()) {
+
             ResultSet rs = stmt.executeQuery("DESCRIBE users");
             System.out.println("Users table structure:");
             while (rs.next()) {
-                System.out.println(rs.getString(1) + " - " + rs.getString(2) + " - " + rs.getString(3));
+                System.out.println(" - " + rs.getString(1) + " : " + rs.getString(2) + " (" + rs.getString(3) + ")");
             }
+
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("Error checking table structure: " + e.getMessage());
+            System.err.println("Error describing table structure: " + e.getMessage());
         }
     }
 }

@@ -5,16 +5,20 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 /**
- * Utility class for password hashing and verification using SHA-256 with a salt.
+ * Utility class for securely hashing and verifying passwords using SHA-256 and random salts.
+ * Ensures safe storage of passwords by combining hash and salt in Base64 format.
+ * 
+ * author: 23048573_ArchanaGiri
  */
 public class PasswordUtil {
-    private static final int SALT_LENGTH = 16; // 16 bytes for salt
+
+    private static final int SALT_LENGTH = 16; // 16 bytes salt length
 
     /**
-     * Hashes a password using SHA-256 with a random salt.
+     * Hashes a plain-text password using SHA-256 with a randomly generated salt.
      *
-     * @param password the plain-text password to hash
-     * @return a string in the format "hashedPassword:salt" where both are Base64-encoded
+     * @param password the plain-text password
+     * @return a string in the format "Base64(hashedPassword):Base64(salt)"
      * @throws Exception if hashing fails
      */
     public static String hashPassword(String password) throws Exception {
@@ -22,67 +26,64 @@ public class PasswordUtil {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
 
-        // Generate a random salt
         byte[] salt = generateSalt();
-        String hashedPassword = hashWithSalt(password.trim(), salt);
+        String hashedPasswordHex = hashWithSalt(password.trim(), salt);
 
-        // Encode hash and salt as Base64 for storage
-        String encodedHash = Base64.getEncoder().encodeToString(hexToBytes(hashedPassword));
+        String encodedHash = Base64.getEncoder().encodeToString(hexToBytes(hashedPasswordHex));
         String encodedSalt = Base64.getEncoder().encodeToString(salt);
 
-        System.out.println("Generated hash for password: " + encodedHash);
-        System.out.println("Generated salt: " + encodedSalt);
+        System.out.println("🔐 Hashed password: " + encodedHash);
+        System.out.println("🧂 Generated salt: " + encodedSalt);
+
         return encodedHash + ":" + encodedSalt;
     }
 
     /**
-     * Verifies a plain-text password against a stored hash:salt pair.
+     * Verifies a plain password against a stored "hash:salt" string.
      *
-     * @param plainPassword the plain-text password to verify
-     * @param storedPassword the stored "hashedPassword:salt" string
-     * @return true if the password matches, false otherwise
+     * @param plainPassword the plain-text password entered by user
+     * @param storedPassword the stored password in "hash:salt" format
+     * @return true if the password is correct, false otherwise
      */
     public static boolean checkPassword(String plainPassword, String storedPassword) {
         if (plainPassword == null || storedPassword == null || storedPassword.isEmpty()) {
-            System.err.println("Invalid input: plainPassword=" + (plainPassword == null ? "null" : "[HIDDEN]") +
-                              ", storedPassword=" + storedPassword);
+            System.err.println("⚠️ Invalid input for password check.");
             return false;
         }
 
         try {
-            // Split stored password into hash and salt
             String[] parts = storedPassword.split(":");
             if (parts.length != 2) {
-                System.err.println("Invalid stored password format: " + storedPassword);
+                System.err.println("❌ Invalid stored password format.");
                 return false;
             }
 
-            // Decode hash and salt
             byte[] storedHash = Base64.getDecoder().decode(parts[0]);
             byte[] salt = Base64.getDecoder().decode(parts[1]);
-            System.out.println("Stored hash: " + parts[0]);
-            System.out.println("Stored salt: " + parts[1]);
 
-            // Hash the provided password with the same salt
-            String computedHash = hashWithSalt(plainPassword.trim(), salt);
-            byte[] computedHashBytes = hexToBytes(computedHash);
+            System.out.println("🔒 Verifying password with stored salt...");
+
+            String computedHashHex = hashWithSalt(plainPassword.trim(), salt);
+            byte[] computedHashBytes = hexToBytes(computedHashHex);
+
             boolean isMatch = MessageDigest.isEqual(computedHashBytes, storedHash);
-            System.out.println("Computed hash: " + Base64.getEncoder().encodeToString(computedHashBytes));
-            System.out.println("Password match: " + isMatch);
+
+            System.out.println("✅ Password match: " + isMatch);
             return isMatch;
+
         } catch (Exception e) {
-            System.err.println("Password verification error: " + e.getMessage());
+            System.err.println("❌ Error during password verification: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
     /**
-     * Hashes a password with a given salt using SHA-256.
+     * Applies SHA-256 hashing algorithm with salt.
      *
      * @param password the password to hash
-     * @param salt the salt to use
-     * @return the hex-encoded hashed password
+     * @param salt     the salt to apply
+     * @return hex string of hashed result
      * @throws Exception if hashing fails
      */
     private static String hashWithSalt(String password, byte[] salt) throws Exception {
@@ -92,12 +93,11 @@ public class PasswordUtil {
         byte[] hash = digest.digest();
         return bytesToHex(hash);
     }
-    
-    
+
     /**
-     * Generates a random salt.
+     * Generates a secure random salt.
      *
-     * @return a byte array containing the salt
+     * @return a byte array containing random salt
      */
     private static byte[] generateSalt() {
         SecureRandom random = new SecureRandom();
@@ -107,36 +107,38 @@ public class PasswordUtil {
     }
 
     /**
-     * Converts a byte array to a hex string.
+     * Converts byte array to hex string.
      *
      * @param bytes the byte array
-     * @return the hex string
+     * @return hex string
      */
     private static String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {
             String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
+            if (hex.length() == 1) sb.append('0');
+            sb.append(hex);
         }
-        return hexString.toString();
+        return sb.toString();
     }
 
     /**
-     * Converts a hex string to a byte array.
+     * Converts hex string to byte array.
      *
      * @param hex the hex string
-     * @return the byte array
+     * @return byte array
      */
     private static byte[] hexToBytes(String hex) {
         int len = hex.length();
         byte[] data = new byte[len / 2];
+
         for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                    + Character.digit(hex.charAt(i + 1), 16));
+            data[i / 2] = (byte) (
+                    (Character.digit(hex.charAt(i), 16) << 4)
+                    + Character.digit(hex.charAt(i + 1), 16)
+            );
         }
+
         return data;
     }
 }

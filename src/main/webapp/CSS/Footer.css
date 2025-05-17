@@ -1,102 +1,106 @@
 @charset "UTF-8";
+
 .footer-section {
-    background-color: snow; /* Or any background color you prefer */
-    padding: 20px; /* Adjust padding as needed */
-    display: flex; /* Make the footer a flex container */
-    flex-direction: column; /* Align the content vertically */
-    text-align: center; /* Center the content within the footer */
+    background-color: #fff6f5;
+    padding: 40px 20px 20px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    color: #400101;
+    border-top: 1px solid #eee;
 }
 
-.logo-tagline {
-    margin-bottom: 10px; /* Add some space between the logo and tagline */
+.footer-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 40px;
+    margin-bottom: 30px;
 }
 
-.logo {
-    display: inline-block; /* Allows the logo to be centered with text-align */
-    /* Add any specific styling for your logo image here */
+.footer-brand {
+    max-width: 300px;
 }
 
-.logo img {
-    max-width: 100px; /* Adjust the maximum width of the logo */
+.footer-brand img {
+    width: 120px;
     height: auto;
-    display: block; /* Prevent extra space below inline images */
-    margin: 0 auto; /* Center the image within the logo div */
+    margin-bottom: 10px;
 }
 
 .tagline {
-    font-size: 0.9rem; /* Adjust font size as needed */
-    color: #5C1A1B; /* Adjust text color as needed */
-    margin-top: 5px; /* Add some space above the tagline */
+    font-size: 14px;
+    margin: 10px 0 20px;
+    color: #5C1A1B;
 }
 
 .email-cta {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    align-items: center;
 }
 
-.email-cta .try-button {
+.email-cta input[type="email"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px 0 0 6px;
+    outline: none;
+    width: 180px;
+}
+
+.email-cta .cta-button {
     background-color: #f39c12;
     color: white;
-    border: none;
     padding: 10px 20px;
-    border-radius: 0 5px 5px 0;
+    border: none;
+    border-radius: 0 6px 6px 0;
     cursor: pointer;
+    font-weight: bold;
 }
 
-/* Footer container for links and social icons */
-.footer-links-container {
+.footer-links,
+.footer-social {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    width: 100%;
-    padding-top: 30px;
-    margin-top: 20px;
+    gap: 8px;
 }
 
-/* Footer links aligned to the left */
-.footer-links {
-    display: flex;
-    flex-direction: column; /* Align the links vertically */
-    gap: 10px;
-    padding-left: 25%;
+.footer-links h4,
+.footer-social h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #400101;
 }
 
-/* Styling for the footer links */
 .footer-links a {
-    color: #5C1A1B;
     text-decoration: none;
+    color: #5C1A1B;
+    font-size: 14px;
+    transition: 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: purple;
+    color: #b30059;
 }
 
-/* Social icons aligned to the right */
-.social-icons {
+.icons {
     display: flex;
-    flex-direction: column;
     gap: 15px;
-    padding-right: 25%;
+    margin-top: 5px;
 }
 
-/* Horizontal layout for the social icons */
-.social-icons-horizontal {
-    display: flex;
-    gap: 15px; /* Space between icons */
-}
-
-/* Styling for social icons */
-.social-icons img {
-    width: 30px; /* Set a specific width for the icons */
+.icons img {
+    width: 30px;
     height: auto;
+    transition: transform 0.3s ease;
 }
 
-p {
-    color: #5C1A1B; /* Adjust text color for footer paragraphs */
-    margin: 0;
+.icons img:hover {
+    transform: scale(1.1);
 }
 
-p:last-child {
-    margin-top: 20px; /* Add space above the final copyright text */
+footer p {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #888;
 }

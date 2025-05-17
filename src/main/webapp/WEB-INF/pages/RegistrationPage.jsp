@@ -1,22 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Register - Savoré</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/RegistrationPage.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">
-            <img src="${pageContext.request.contextPath}/Resources/Images/System/FinalLogo.png" alt="Savoré Logo">
-        </div>
-    </nav>
-    <div class="container">
-        <div class="form-box">
-            <h1><span style="color: #b45f06;">Savoré</span></h1>
+
+<div class="wrapper">
+    <!-- Left Image -->
+    <div class="image-side">
+        <img src="${pageContext.request.contextPath}/Resources/Images/System/Home/RegisterBanner.jpg" alt="Register Banner">
+    </div>
+
+    <!-- Right Form -->
+    <div class="form-side">
+        <div class="form-card">
+            <img src="${pageContext.request.contextPath}/Resources/Images/System/FinalLogo.png" class="logo" alt="Savoré Logo">
             <h2>Create Account</h2>
+            <p>Sign up with your personal information</p>
 
             <c:if test="${not empty error}">
                 <div class="error-message">${error}</div>
@@ -36,7 +40,7 @@
 
                 <label for="address">Address</label>
                 <input type="text" id="address" name="address" placeholder="Enter address">
-                
+
                 <label for="profileImage">Profile Image</label>
                 <input type="file" id="profileImage" name="profileImage" accept="image/*" required>
 
@@ -47,17 +51,13 @@
                     <option value="USER">User</option>
                 </select>
 
-                <button type="submit" class="signup-btn">Sign Up</button>
+                <button type="submit" class="submit-btn">Sign Up</button>
             </form>
 
-            <p>Already have an account? <a href="${pageContext.request.contextPath}/logIn">Log In</a></p>
-            <p>Join with</p>
-            <div class="social-icons">
-                <img src="${pageContext.request.contextPath}/Resources/Images/System/facebook-icon.png" alt="Facebook">
-                <img src="${pageContext.request.contextPath}/Resources/Images/System/mail-icon.png" alt="Email">
-                <img src="${pageContext.request.contextPath}/Resources/Images/System/camera-icon.png" alt="Other">
-            </div>
+            <p class="login-text">Already have an account? <a href="${pageContext.request.contextPath}/logIn" class="login-link">Log In</a></p>
         </div>
     </div>
+</div>
+
 </body>
 </html>

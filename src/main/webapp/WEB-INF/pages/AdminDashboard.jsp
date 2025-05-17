@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard - Savoré</title>
+    <title>Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
@@ -57,10 +57,14 @@
                 <div class="text-2xl font-bold text-blue-600" id="total-users">${totalUsers}</div>
                 <canvas id="total-users-chart" class="mt-2 mx-auto" width="150" height="150"></canvas>
             </div>
-            <div class="bg-white shadow-md rounded-md p-4 text-center">
+            <%--<div class="bg-white shadow-md rounded-md p-4 text-center">
                 <div class="text-xl font-semibold text-gray-700 mb-2">New Registrations</div>
                 <div class="text-2xl font-bold text-purple-600" id="new-signups">${newSignups}</div>
-            </div>
+            </div>--%>
+            <div class="bg-white shadow-md rounded-md p-4">
+    			<h2 class="text-xl font-semibold text-center text-gray-700 mb-4">New Registrations (Past 7 Days)</h2>
+    			<canvas id="donutChart" width="400" height="300"></canvas>
+			</div>
             <div class="bg-white shadow-md rounded-md p-4 text-center">
                 <div class="text-xl font-semibold text-gray-700 mb-2">Total Revenue</div>
                 <div class="text-2xl font-bold text-black" id="total-revenue">$<fmt:formatNumber value="${totalRevenue}" pattern="#,##0.00"/></div>
@@ -170,6 +174,30 @@
                 plugins: {
                     legend: {
                         display: false
+                    }
+                }
+            }
+        });
+        const ctx = document.getElementById('donutChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['May 11', 'May 12', 'May 13', 'May 14', 'May 15', 'May 16', 'May 17'], // Replace with dynamic data
+                datasets: [{
+                    label: 'New Registrations',
+                    data: [5, 8, 6, 7, 10, 4, 12], // Replace with dynamic data
+                    backgroundColor: [
+                        '#6366F1', '#8B5CF6', '#A78BFA',
+                        '#C4B5FD', '#E0E7FF', '#DDD6FE', '#EDE9FE'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
                     }
                 }
             }

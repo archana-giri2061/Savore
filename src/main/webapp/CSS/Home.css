@@ -1,117 +1,134 @@
 @charset "UTF-8";
 
+/* HERO SECTION */
 body {
-    font-family: sans-serif;
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff8f5;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
     color: #333;
-    line-height: 1.6;
 }
-
-.container {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
 .hero {
-    background-image: url('../Resources/Images/System/Home/home1.jpg');
-    background-size: cover;
-    background-position: center;
-    padding: 80px 20px;
-    text-align: center;
-    margin-bottom: 30px;
-    color: #5C1A1B;
+  position: relative;
+  background-image: url('../Resources/Images/System/Home/homeBanner.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 100px 20px;
+  text-align: center;
+  color: #fff;
+  border-radius: 12px;
+  margin: 30px 0;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
+/* Overlay for contrast */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.45);  /* dark overlay */
+  z-index: 1;
+}
+
+/* Bring content above overlay */
+.hero h1,
+.hero p,
+.hero button {
+  position: relative;
+  z-index: 2;
+}
+
+/* Updated Typography */
 .hero h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
+  font-size: 3em;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
 }
 
 .hero p {
-    font-size: 1.9em;
-    margin-bottom: 20px;
+  font-size: 1.2em;
+  color: #f1f1f1;
+  margin-bottom: 30px;
+  font-weight: 400;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero button {
-    background-color: #5865F2;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
+  background-color: #5865F2;
+  color: #fff;
+  padding: 12px 30px;
+  font-size: 1em;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.hero button:hover {
+  background-color: #3d4be0;
+  transform: scale(1.03);
+}
+
+
+/* Cuisine Section */
 .cuisine-list {
-    text-align: center;
-    margin-bottom: 40px;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 40px;
 }
 
 .cuisine-list h2 {
-    font-size: 1.8em;
-    margin-bottom: 20px;
+  font-size: 2em;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
 }
 
 .cuisine-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
 }
 
 .cuisine-item {
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cuisine-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .cuisine-item img {
-    width: 250px;            /* fixed width */
-    height: 180px;           /* fixed height */
-    object-fit: cover;       /* crop and scale image to fit */
-    border-radius: 10px;     /* optional rounded corners */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* optional shadow */
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
 }
 
-
 .cuisine-item h3 {
-    font-size: 1.2em;
-    margin: 10px 0 5px;
+  font-size: 1.2em;
+  color: #2e2e2e;
+  margin-bottom: 10px;
 }
 
 .cuisine-item p {
-    color: #777;
-    font-size: 0.9em;
-    margin-bottom: 5px;
-}
-
-footer {
-    background-color: #f4f4f4;
-    padding: 30px 20px;
-    text-align: center;
-    border-top: 1px solid #ddd;
-}
-
-footer a {
-    text-decoration: none;
-    color: #555;
-}
-
-.footer-links a:hover,
-.social-links a:hover {
-    color: #333;
-}
-
-.footer-links ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-footer p {
-    margin: 10px 0;
+  font-size: 0.95em;
+  color: #666;
+  margin: 5px 0;
 }

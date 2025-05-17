@@ -7,10 +7,19 @@ import java.time.format.DateTimeFormatter;
 
 import jakarta.servlet.http.Part;
 
+/**
+ * Utility class for handling image uploads and file name generation.
+ * Supports saving images to user profile or cuisine directories with unique names.
+ * 
+ * author: 23048573_ArchanaGiri
+ */
 public class ImageUtil {
 
     /**
-     * Extracts original file name from the uploaded part.
+     * Extracts the original filename from the uploaded form part.
+     *
+     * @param part the uploaded file part
+     * @return the extracted filename, or "default.jpg" if not found
      */
     public String getImageNameFromPart(Part part) {
         String contentDisp = part.getHeader("content-disposition");
@@ -27,8 +36,12 @@ public class ImageUtil {
     }
 
     /**
-     * Uploads the image to the specified folder in your system.
-     * This version uses a hardcoded base path and appends the given folder name.
+     * Uploads the given image part to the designated directory.
+     *
+     * @param part       the image file part
+     * @param rootPath   (currently unused, kept for future extension)
+     * @param saveFolder the folder name under the predefined path
+     * @return true if the image is saved successfully, false otherwise
      */
     public boolean uploadImage(Part part, String rootPath, String saveFolder) {
         String savePath = getSavePath(saveFolder);
@@ -47,7 +60,7 @@ public class ImageUtil {
             String filePath = savePath + File.separator + uniqueFileName;
             part.write(filePath);
 
-            System.out.println("✅ Image saved to: " + filePath);
+            System.out.println("Image saved to: " + filePath);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,21 +69,33 @@ public class ImageUtil {
     }
 
     /**
-     * Constructs the full absolute system path to save images into.
-     * This must match your project folder structure.
+     * Returns the full absolute system path for user profile image storage.
+     *
+     * @param saveFolder optional subfolder to be added
+     * @return complete system path
      */
     public String getSavePath(String saveFolder) {
-        return "C:\\Users\\ARCHANA\\eclipse-workspace\\Savore\\src\\main\\webapp\\Resources\\Images\\System/UserProfile" 
-                + File.separator + saveFolder;
-    }
-    public String getSavePathCuisine(String saveFolder) {
-        return "C:\\Users\\ARCHANA\\eclipse-workspace\\Savore\\src\\main\\webapp\\Resources\\Images\\System/Cuisine" 
+        return "C:\\Users\\ARCHANA\\eclipse-workspace\\Savore\\src\\main\\webapp\\Resources\\Images\\System\\UserProfile" 
                 + File.separator + saveFolder;
     }
 
     /**
-     * Static method that returns the unique filename after saving.
-     * Useful when you want to save the actual filename into DB.
+     * Returns the full absolute system path for cuisine image storage.
+     *
+     * @param saveFolder optional subfolder to be added
+     * @return complete system path
+     */
+    public String getSavePathCuisine(String saveFolder) {
+        return "C:\\Users\\ARCHANA\\eclipse-workspace\\Savore\\src\\main\\webapp\\Resources\\Images\\System\\Cuisine" 
+                + File.separator + saveFolder;
+    }
+
+    /**
+     * Saves the uploaded image with a unique filename into the specified directory.
+     *
+     * @param part      the image file part
+     * @param uploadDir the directory where image will be stored
+     * @return the generated filename (or "default.jpg" on failure)
      */
     public static String saveImage(Part part, String uploadDir) {
         try {
@@ -84,6 +109,7 @@ public class ImageUtil {
             String uniqueName = "IMG_" + DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.now()) + extension;
 
             part.write(uploadDir + File.separator + uniqueName);
+            System.out.println("Image saved via static method: " + uniqueName);
             return uniqueName;
         } catch (Exception e) {
             e.printStackTrace();

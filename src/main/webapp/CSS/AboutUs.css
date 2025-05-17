@@ -1,4 +1,11 @@
 @charset "UTF-8";
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff8f5;
+    margin: 1px;
+    padding: 5px;
+    color: #333;
+}
 .about-us {
             display: grid;
             grid-template-columns: 1fr 1fr;
