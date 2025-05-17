@@ -1,9 +1,13 @@
 package com.Savore.Controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.Savore.DAO.FoodItemsDAO;
@@ -22,6 +26,9 @@ import jakarta.servlet.http.Part;
 public class FoodListController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private FoodItemsDAO foodItemsDao;
+
+    private static final String IMAGE_FOLDER = "Resources/Images/System/Cuisine";
+    private static final String ABSOLUTE_RESOURCE_PATH = "C:\\Users\\ARCHANA\\eclipse-workspace\\Savore\\src\\main\\webapp\\Resources\\Images\\System\\Cuisine";
 
     @Override
     public void init() throws ServletException {
@@ -43,7 +50,6 @@ public class FoodListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String action = request.getParameter("action");
 
         if ("edit".equals(action)) {
@@ -68,19 +74,34 @@ public class FoodListController extends HttpServlet {
             String imageUrl = existingImageUrl;
 
             if (imagePart != null && imagePart.getSize() > 0) {
-                String fileName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
-                String uploadPath = getServletContext().getRealPath("/") + "images";
+                String originalFileName = imagePart.getSubmittedFileName();
+                String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String uniqueFileName = "IMG_" + DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
+                        .format(LocalDateTime.now()) + extension;
 
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) uploadDir.mkdir();
+                // Save to deployment (Tomcat) path
+                String deploymentPath = request.getServletContext().getRealPath("") + File.separator + IMAGE_FOLDER;
+                File deployDir = new File(deploymentPath);
+                if (!deployDir.exists()) deployDir.mkdirs();
+                try (InputStream input = imagePart.getInputStream();
+                     OutputStream output = new FileOutputStream(new File(deploymentPath, uniqueFileName))) {
+                    input.transferTo(output);
+                }
 
-                imageUrl = "images/" + fileName;
-                imagePart.write(uploadPath + File.separator + fileName);
+                // Save to development resource folder
+                File devDir = new File(ABSOLUTE_RESOURCE_PATH);
+                if (!devDir.exists()) devDir.mkdirs();
+                try (InputStream input = imagePart.getInputStream();
+                     OutputStream output = new FileOutputStream(new File(devDir, uniqueFileName))) {
+                    input.transferTo(output);
+                }
+
+                // Save web path to DB
+                imageUrl = IMAGE_FOLDER + "/" + uniqueFileName;
             }
 
             FoodItems updatedFood = new FoodItems(foodId, foodName, description, price, country, imageUrl, availability);
             foodItemsDao.updateFood(updatedFood);
-
             response.sendRedirect("FoodList");
 
         } catch (Exception e) {

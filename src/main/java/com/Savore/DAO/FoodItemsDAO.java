@@ -70,15 +70,29 @@ public class FoodItemsDAO {
         }
     }
 
-    public void deleteFoodItem(int foodId) {
-        String sql = "DELETE FROM food_items WHERE food_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, foodId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void deleteFoodItem(int foodId) throws SQLException, ClassNotFoundException {
+        Connection conn = DbConfig.getDbConnection();
+
+        try {
+            // Step 1: Delete dependent order_items
+            String deleteOrderItems = "DELETE FROM order_items WHERE food_id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(deleteOrderItems)) {
+                ps.setInt(1, foodId);
+                ps.executeUpdate();
+            }
+
+            // Step 2: Now delete the food item
+            String deleteFood = "DELETE FROM food_items WHERE food_id = ?";
+            try (PreparedStatement ps = conn.prepareStatement(deleteFood)) {
+                ps.setInt(1, foodId);
+                ps.executeUpdate();
+            }
+
+        } finally {
+            conn.close();
         }
     }
+
 
     public FoodItems getFoodById(int foodId) {
         FoodItems item = null;
@@ -139,6 +153,41 @@ public class FoodItemsDAO {
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return foodList;
+    }
+    public List<FoodItems> getOneFoodPerCountry() {
+        List<FoodItems> foodList = new ArrayList<>();
+        String sql = """
+            SELECT fi.*
+            FROM food_items fi
+            INNER JOIN (
+                SELECT country, MIN(food_id) AS min_id
+                FROM food_items
+                WHERE availability = 'Available'
+                GROUP BY country
+            ) grouped
+            ON fi.country = grouped.country AND fi.food_id = grouped.min_id
+        """;
+
+        try (Connection conn = DbConfig.getDbConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                FoodItems food = new FoodItems();
+                food.setFoodId(rs.getInt("food_id"));
+                food.setFoodName(rs.getString("food_name"));
+                food.setDescription(rs.getString("description"));
+                food.setPrice(rs.getDouble("price"));
+                food.setCountry(rs.getString("country"));
+                food.setImageUrl(rs.getString("image_url"));
+                food.setAvailability(rs.getString("availability"));
+                foodList.add(food);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

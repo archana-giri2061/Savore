@@ -1,3 +1,4 @@
+// AdminDashboardController.java
 package com.Savore.Controller;
 
 import com.Savore.service.DashboardService;
@@ -40,6 +41,7 @@ public class AdminDashboardController extends HttpServlet {
             req.setAttribute("newSignups", metrics.get("newSignups"));
             req.setAttribute("totalOrders", metrics.get("totalOrders"));
             req.setAttribute("totalRevenue", metrics.get("totalRevenue"));
+            req.setAttribute("recentOrders", metrics.get("recentOrders"));
 
         } catch (SQLException | ClassNotFoundException e) {
             req.setAttribute("error", "Failed to load dashboard data.");
@@ -48,5 +50,4 @@ public class AdminDashboardController extends HttpServlet {
 
         req.getRequestDispatcher("/WEB-INF/pages/AdminDashboard.jsp").forward(req, resp);
     }
-
 }

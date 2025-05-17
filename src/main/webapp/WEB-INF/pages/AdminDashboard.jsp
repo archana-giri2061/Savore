@@ -18,14 +18,23 @@
 	
 	<div class="flex">
     <aside class="bg-white w-64 p-4 shadow-md">
-        <div class="logo text-xl font-semibold text-gray-800 mb-6">Savoré</div>
-        <nav class="space-y-2">
-            <a href="${pageContext.request.contextPath}/FoodList" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">Food List</a>
-            <a href="${pageContext.request.contextPath}/AddFood" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">Add Food</a>
-            <a href="${pageContext.request.contextPath}/AdminProfile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">Profile</a>
-            <a href="${pageContext.request.contextPath}/admin/logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">Logout</a>
-        </nav>
-    </aside>
+    	<div class="logo text-xl font-semibold text-gray-800 mb-6">Savoré</div>
+    	<nav class="space-y-2">
+        	<a href="${pageContext.request.contextPath}/FoodList" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+            Food List
+        	</a>
+        	<a href="${pageContext.request.contextPath}/AddFood" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+            Add Food
+        	</a>
+        	<a href="${pageContext.request.contextPath}/AdminProfile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+            Profile
+        	</a>
+        	<a href="${pageContext.request.contextPath}/Logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
+            <button class="w-full text-left">Logout</button>
+       	 	</a>
+    	</nav>
+	</aside>
+
 
     <main class="flex-1 p-6 overflow-y-auto">
         <header class="flex justify-between items-center mb-8">
@@ -66,37 +75,51 @@
         	
 
         <section class="bg-white shadow-md rounded-md p-4 mt-10">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Orders</h2>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Name</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Food Items</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <c:forEach var="order" items="${recentOrders}">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.orderId}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${order.userName}</td>
-                                <td class="px-6 py-4 text-sm text-gray-500">${order.foodItems}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<fmt:formatNumber value="${order.totalAmount}" pattern="#,##0.00"/></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm ${order.status == 'Delivered' ? 'text-green-500' : order.status == 'Cancelled' ? 'text-red-500' : 'text-yellow-500'}">${order.status}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><fmt:formatDate value="${order.orderDate}" pattern="dd MMM yyyy HH:mm"/></td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-            <c:if test="${empty recentOrders}">
-                <p class="mt-4 text-gray-500">No recent orders found.</p>
-            </c:if>
-        </section>
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Orders</h2>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Food Item</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <c:forEach var="order" items="${recentOrders}">
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${order.orderId}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${order.username}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${order.foodName}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">${order.quantity}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<fmt:formatNumber value="${order.unitPrice}" pattern="#,##0.00"/></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$<fmt:formatNumber value="${order.amount}" pattern="#,##0.00"/></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm 
+                            <c:choose>
+                                <c:when test="${order.status == 'DELIVERED'}">text-green-600</c:when>
+                                <c:when test="${order.status == 'CANCELLED'}">text-red-600</c:when>
+                                <c:otherwise>text-yellow-600</c:otherwise>
+                            </c:choose>">
+                            ${order.status}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <fmt:formatDate value="${order.orderDate}" pattern="dd MMM yyyy HH:mm"/>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </div>
+    <c:if test="${empty recentOrders}">
+        <p class="mt-4 text-gray-500">No recent orders found.</p>
+    </c:if>
+</section>
+
     </main>
 </div>
 

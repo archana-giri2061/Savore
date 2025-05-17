@@ -63,6 +63,10 @@ public class ImageUtil {
         return "C:\\Users\\ARCHANA\\eclipse-workspace\\Savore\\src\\main\\webapp\\Resources\\Images\\System/UserProfile" 
                 + File.separator + saveFolder;
     }
+    public String getSavePathCuisine(String saveFolder) {
+        return "C:\\Users\\ARCHANA\\eclipse-workspace\\Savore\\src\\main\\webapp\\Resources\\Images\\System/Cuisine" 
+                + File.separator + saveFolder;
+    }
 
     /**
      * Static method that returns the unique filename after saving.
@@ -83,7 +87,7 @@ public class ImageUtil {
             return uniqueName;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "default.jpg";
         }
     }
 }
